@@ -51,7 +51,7 @@ def test_api():
     # Test 3: GET dashboard stats
     print("\n[TEST 3] GET /api/dashboard/stats/ (antes do segundo trade)")
     try:
-        response = requests.get(f"{API_URL}/trades/stats/")
+        response = requests.get(f"{API_URL}/dashboard/stats/")
         print(f"Status: {response.status_code}")
         stats = response.json()
         print(f"Stats: {json.dumps(stats, indent=2)}")
@@ -81,7 +81,7 @@ def test_api():
     # Test 5: GET dashboard stats (após criar trades)
     print("\n[TEST 5] GET /api/dashboard/stats/ (após criar trades)")
     try:
-        response = requests.get(f"{API_URL}/trades/stats/")
+        response = requests.get(f"{API_URL}/dashboard/stats/")
         print(f"Status: {response.status_code}")
         stats = response.json()
         print(f"Stats: {json.dumps(stats, indent=2)}")

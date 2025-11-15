@@ -5,6 +5,7 @@ from .models import Trade
 class TradeSerializer(serializers.ModelSerializer):
     profit_loss = serializers.SerializerMethodField()
     profit_loss_percentage = serializers.SerializerMethodField()
+    screenshot = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Trade
@@ -33,3 +34,14 @@ class TradeSerializer(serializers.ModelSerializer):
 
     def get_profit_loss_percentage(self, obj):
         return obj.profit_loss_percentage
+    
+    def to_representation(self, instance):
+        """Override to return full URL for screenshot"""
+        representation = super().to_representation(instance)
+        if instance.screenshot:
+            request = self.context.get('request')
+            if request:
+                representation['screenshot'] = request.build_absolute_uri(instance.screenshot.url)
+            else:
+                representation['screenshot'] = instance.screenshot.url
+        return representation

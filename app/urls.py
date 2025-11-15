@@ -20,13 +20,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
-from logger.views import TradeViewSet
+from logger.views import TradeViewSet, dashboard_stats
 
 router = DefaultRouter()
 router.register(r'trades', TradeViewSet, basename='trade')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/dashboard/stats/", dashboard_stats, name='dashboard-stats'),
     path("api/", include(router.urls)),
 ]
 

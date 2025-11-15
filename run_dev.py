@@ -49,7 +49,7 @@ def print_instructions():
     print("  POST   /api/trades/           - Criar nova operação")
     print("  PATCH  /api/trades/{id}/      - Atualizar operação")
     print("  DELETE /api/trades/{id}/      - Deletar operação")
-    print("  GET    /api/trades/stats/     - Obter estatísticas do dashboard")
+    print("  GET    /api/dashboard/stats/  - Obter estatísticas do dashboard")
     print("\n🔗 URLs importantes:")
     print("  API Backend:   http://127.0.0.1:8000/api/")
     print("  Admin Django:  http://127.0.0.1:8000/admin/")

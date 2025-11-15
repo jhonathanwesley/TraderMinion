@@ -4,7 +4,6 @@
 
 ### Pré-requisitos
 - Python 3.9+
-- Node.js 18+ e npm
 - Make (opcional, mas recomendado)
   - **Windows**: Instale via [Chocolatey](https://chocolatey.org/) (`choco install make`) ou use Git Bash/WSL
   - **Linux/Mac**: Geralmente já vem instalado
@@ -29,18 +28,15 @@ make setup
 # Terminal 1: Iniciar servidor backend Django
 make server
 
-# Terminal 2: Iniciar servidor frontend (opcional, se quiser rodar o frontend)
-make dev-frontend
+# Terminal 2: Iniciar aplicação desktop
+make desktop
 ```
 
 ### Outros Comandos Úteis
 
 ```bash
-# Instalar apenas dependências do backend
+# Instalar dependências
 make install-backend
-
-# Instalar apenas dependências do frontend
-make install-frontend
 
 # Aplicar migrações
 make migrate
@@ -57,8 +53,8 @@ make test
 # Limpar arquivos temporários
 make clean
 
-# Build de produção do frontend
-make build-frontend
+# Compilar aplicação desktop
+make build-desktop
 ```
 
 ## 📝 Método 2: Instalação Manual
@@ -71,28 +67,20 @@ Se preferir não usar o Makefile, siga os passos abaixo:
 pip install -r requirements.txt
 ```
 
-### Passo 2: Instalar dependências do frontend
-
-```bash
-cd client
-npm install
-cd ..
-```
-
-### Passo 3: Criar/Aplicar migrações do banco de dados
+### Passo 2: Criar/Aplicar migrações do banco de dados
 
 ```bash
 python manage.py migrate
 ```
 
-### Passo 4: Criar superusuário (opcional, para acessar admin)
+### Passo 3: Criar superusuário (opcional, para acessar admin)
 
 ```bash
 python manage.py createsuperuser
 # ou usar as credenciais padrão: admin / admin123
 ```
 
-### Passo 5: Iniciar o servidor Django (em um terminal)
+### Passo 4: Iniciar o servidor Django (em um terminal)
 
 ```bash
 python manage.py runserver
@@ -100,14 +88,13 @@ python manage.py runserver
 
 O servidor estará disponível em: **http://127.0.0.1:8000**
 
-### Passo 6: Iniciar o frontend (em outro terminal, opcional)
+### Passo 5: Iniciar a aplicação desktop (em outro terminal)
 
 ```bash
-cd client
-npm run dev
+python main_desktop.py
 ```
 
-### Passo 7: Testar a API (em outro terminal)
+### Passo 6: Testar a API (em outro terminal, opcional)
 
 ```bash
 python test_api.py
@@ -198,17 +185,13 @@ curl -X DELETE http://127.0.0.1:8000/api/trades/1/
 | profit_loss | Decimal (calculado) | Lucro/Prejuízo |
 | profit_loss_percentage | Decimal (calculado) | Lucro/Prejuízo em % |
 
-## 🌐 Integração Frontend
+## 🌐 Integração Desktop App
 
-O frontend (React/Vite) faz requisições para:
+A aplicação desktop (Kivy) faz requisições para:
 - `http://localhost:8000/api/trades/`
 - `http://localhost:8000/api/dashboard/stats/`
 
-CORS está configurado para aceitar requisições de:
-- `http://localhost:3000`
-- `http://localhost:5173`
-- `http://127.0.0.1:3000`
-- `http://127.0.0.1:5173`
+CORS está configurado para desenvolvimento local.
 
 ## 📁 Estrutura do projeto
 
@@ -225,13 +208,11 @@ TraderMinion/
 │   ├── serializers.py      # Serializers DRF
 │   ├── admin.py            # Admin do Django
 │   └── migrations/
-├── client/                 # Frontend React/Vite
-│   ├── src/
-│   │   ├── components/     # Componentes React
-│   │   ├── services/       # API client
-│   │   ├── types/          # TypeScript types
-│   │   └── contexts/       # React contexts
-│   └── vite.config.js
+├── desktop/                # Aplicação Desktop (Kivy)
+│   ├── screens/            # Telas da aplicação
+│   ├── api_client.py       # Cliente API
+│   ├── widgets.py          # Widgets customizados
+│   └── main.py             # App principal
 ├── media/                  # Uploads (screenshots)
 ├── db.sqlite3              # Banco de dados
 ├── manage.py               # Django CLI
@@ -291,9 +272,6 @@ make clean-db
 # Limpar cache Python
 find . -type d -name "__pycache__" -exec rm -r {} +
 find . -type f -name "*.pyc" -delete
-
-# Limpar node_modules (se necessário)
-rm -rf client/node_modules
 ```
 
 ## 🛠️ Comandos Makefile Completos
@@ -302,24 +280,21 @@ rm -rf client/node_modules
 |---------|-----------|
 | `make help` | Mostra todos os comandos disponíveis |
 | `make setup` | Setup completo (instala dependências + migrações) |
-| `make install` | Instala todas as dependências (backend + frontend) |
-| `make install-backend` | Instala apenas dependências Python |
-| `make install-frontend` | Instala apenas dependências Node.js |
+| `make install` | Instala todas as dependências (backend) |
+| `make install-backend` | Instala dependências Python |
 | `make migrate` | Aplica migrações do banco de dados |
 | `make makemigrations` | Cria novas migrações |
 | `make createsuperuser` | Cria um superusuário Django |
 | `make server` | Inicia servidor Django (backend) |
 | `make dev-backend` | Alias para `make server` |
-| `make dev-frontend` | Inicia servidor de desenvolvimento do frontend |
+| `make desktop` | Inicia aplicação desktop Kivy |
+| `make build-desktop` | Compila aplicação desktop com PyInstaller |
 | `make test` | Executa testes da API |
 | `make test-api` | Alias para `make test` |
 | `make clean` | Limpa arquivos temporários e cache |
 | `make clean-db` | Remove o banco de dados SQLite (CUIDADO!) |
-| `make build-frontend` | Build de produção do frontend |
 | `make collectstatic` | Coleta arquivos estáticos (Django) |
 | `make shell` | Abre o shell interativo do Django |
-| `make check` | Verifica o código com linters |
-| `make typecheck` | Verifica tipos TypeScript |
 
 ## 📞 Suporte
 
@@ -332,4 +307,4 @@ Para mais informações sobre Django REST Framework:
 - **Windows**: Se não tiver `make` instalado, você pode usar Git Bash ou WSL para executar os comandos do Makefile
 - **Primeira execução**: Sempre execute `make setup` na primeira vez para configurar tudo
 - **Servidor Django**: Deve rodar em um terminal separado e permanecer aberto (não há modo detached no servidor de desenvolvimento)
-- **Frontend**: O frontend é opcional se você quiser apenas testar a API diretamente
+- **Aplicação Desktop**: A aplicação desktop se conecta ao backend em `http://localhost:8000/api`

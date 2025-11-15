@@ -1,10 +1,18 @@
 # TraderMinion - Acompanhamento de Operações de Especulações Financeiras
 
-Aplicação web full-stack para acompanhamento de operações financeiras, desenvolvida com Django REST Framework (backend) e React + TypeScript + Vite (frontend).
+Aplicação desktop para acompanhamento de operações financeiras com:
+- **Backend**: Django REST Framework (API REST)
+- **Desktop App**: Python + Kivy (aplicação desktop nativa)
 
 ## 🚀 Início Rápido
 
-### Usando Makefile (Recomendado)
+### Windows (Recomendado - Duplo Clique)
+
+1. **Setup Completo**: Duplo clique em `setup.bat`
+2. **Iniciar Tudo**: Duplo clique em `start_all.bat` (abre servidor e desktop automaticamente)
+   - Ou inicie separadamente: `scripts\start_server.bat` e `scripts\start_desktop.bat`
+
+### Linux/Mac (Makefile)
 
 ```bash
 # Ver todos os comandos disponíveis
@@ -13,15 +21,16 @@ make help
 # Setup completo (instala dependências e aplica migrações)
 make setup
 
-# Iniciar servidor backend Django
+# Terminal 1: Iniciar servidor backend Django
 make server
 
-# Em outro terminal: Iniciar frontend
-make dev-frontend
+# Terminal 2: Iniciar aplicação desktop
+make desktop
 
-# Testar API
-make test
+# Para compilar executável standalone:
+make build-desktop
 ```
+
 
 ### Instalação Manual
 
@@ -43,16 +52,15 @@ A aplicação está pronta para consumir o backend Django nos seguintes endpoint
 |---------|-----------|
 | `make help` | Mostra todos os comandos disponíveis |
 | `make setup` | Setup completo (instala dependências + migrações) |
-| `make install` | Instala todas as dependências (backend + frontend) |
-| `make install-backend` | Instala apenas dependências Python |
-| `make install-frontend` | Instala apenas dependências Node.js |
+| `make install` | Instala todas as dependências (backend) |
+| `make install-backend` | Instala dependências Python |
 | `make migrate` | Aplica migrações do banco de dados |
 | `make makemigrations` | Cria novas migrações |
 | `make server` | Inicia servidor Django (backend) |
-| `make dev-frontend` | Inicia servidor de desenvolvimento do frontend |
+| `make desktop` | Inicia aplicação desktop Kivy |
+| `make build-desktop` | Compila aplicação desktop com PyInstaller |
 | `make test` | Executa testes da API |
 | `make clean` | Limpa arquivos temporários e cache |
-| `make build-frontend` | Build de produção do frontend |
 
 ## 📚 Documentação
 
@@ -62,12 +70,44 @@ A aplicação está pronta para consumir o backend Django nos seguintes endpoint
 ## 🏗️ Tecnologias
 
 - **Backend**: Django 5.2, Django REST Framework
-- **Frontend**: React 18, TypeScript, Vite, TailwindCSS
+- **Desktop App**: Python 3.9+, Kivy 2.2+
 - **Banco de Dados**: SQLite (desenvolvimento)
-- **Outras**: Pillow (processamento de imagens), django-cors-headers
+- **Build**: PyInstaller (para executável desktop)
+- **Outras**: Pillow (processamento de imagens), django-cors-headers, requests
+
+## 📱 Aplicação Desktop
+
+A aplicação desktop é a interface principal, desenvolvida com Kivy para uma experiência nativa. Ela se comunica com o backend Django via API REST.
+
+### Características:
+- ✅ Interface moderna e intuitiva
+- ✅ Dashboard com estatísticas em tempo real
+- ✅ Registro de operações com upload de screenshots
+- ✅ Design moderno e responsivo
+- ✅ Compilável em executável standalone com PyInstaller
+
+### Executar no Windows:
+1. Duplo clique em `start_server.bat` (Terminal 1)
+2. Duplo clique em `start_desktop.bat` (Terminal 2)
+
+### Executar no Linux/Mac:
+```bash
+# Certifique-se de que o backend está rodando
+make server
+
+# Em outro terminal
+make desktop
+```
+
+### Compilar executável:
+- **Windows**: Duplo clique em `scripts\build_desktop.bat`
+- **Linux/Mac**: `make build-desktop` (na pasta scripts)
+- O executável estará em `dist/TraderMinion.exe` (Windows) ou `dist/TraderMinion` (Linux/Mac)
 
 ## 📝 Notas
 
 - O servidor Django deve rodar em um terminal separado e permanecer aberto
+- A aplicação desktop se conecta ao backend em `http://localhost:8000/api`
 - CORS está configurado para desenvolvimento local
 - Screenshots são salvos em `media/screenshots/`
+- O executável compilado ainda requer o backend Django rodando (não é totalmente standalone)
